@@ -2,8 +2,14 @@ package gg.nextforge.nextbot.core;
 
 import gg.nextforge.nextbot.api.*;
 import gg.nextforge.nextbot.addons.AddonDescriptor;
+import gg.nextforge.nextbot.api.config.ConfigFacade;
+import gg.nextforge.nextbot.api.placeholder.PlaceholderRegistry;
+import gg.nextforge.nextbot.core.placeholder.PlaceholderRegistryImpl;
 import gg.nextforge.nextbot.holder.JdaHolder;
 import gg.nextforge.nextbot.properties.BotProperties;
+import gg.nextforge.nextbot.services.CommandRegistrarImpl;
+import gg.nextforge.nextbot.services.ConfigFacadeImpl;
+import gg.nextforge.nextbot.services.CoreLogger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
