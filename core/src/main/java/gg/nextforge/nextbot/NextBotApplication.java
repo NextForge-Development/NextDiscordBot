@@ -1,8 +1,9 @@
 package gg.nextforge.nextbot;
 
 import gg.nextforge.nextbot.addons.AddonManager;
+import gg.nextforge.nextbot.holder.JdaHolder;
+import gg.nextforge.nextbot.properties.BotProperties;
 import gg.nextforge.nextbot.services.CommandRegistrarImpl;
-import gg.nextforge.nextbot.services.JdaHolder;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.JDABuilder;
@@ -28,12 +29,10 @@ public class NextBotApplication {
         var builder = JDABuilder.createDefault(props.token())
                 .enableIntents(props.intentsResolved());
         var jda = builder.build().awaitReady();
-        jdaHolder.set(jda);
+        jdaHolder.setJda(jda);
 
-        // attach command bus to JDA
         commands.attach(jda);
 
-        // load addons
         addonManager.loadAll();
     }
 }
