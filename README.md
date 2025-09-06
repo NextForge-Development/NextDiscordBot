@@ -23,37 +23,59 @@ into the `addons/` folder.
 ## 🏗️ Architecture
 
 ```mermaid
-flowchart LR
-    subgraph Discord
-      A[Discord API]
-    end
+flowchart TB
+  %% Clean vertical layout: Discord (top) → Core (middle) → Addons (bottom)
 
-    subgraph Core
-      C1[Bot Lifecycle]
-      C2[CommandRegistrar]
-      C3[PlaceholderRegistry]
-      C4[ConfigFacade]
-      C5[AddonManager + ClassLoader]
-    end
+  subgraph Discord
+    A["Discord API"]
+  end
 
-    subgraph Addons
-      P1[Addon #1]
-      P2[Addon #2]
-      Pn[...]
-    end
+  subgraph Core
+    direction LR
+    M["AddonManager\n+ ClassLoader"]
+    API(("Core API"))
+    C1["Bot Lifecycle"]
+    C2["CommandRegistrar"]
+    C3["PlaceholderRegistry"]
+    C4["ConfigFacade"]
 
-    A -- events --> Core
-    Core -- JDA Events --> C2
-    C5 <-- scans & loads --> Addons
-    P1 --> C2
-    P1 --> C3
-    P1 --> C4
-    P2 --> C2
-    P2 --> C3
-    P2 --> C4
+    %% Internal wiring
+    API --> C2
+    API --> C3
+    API --> C4
+  end
+
+  subgraph Addons
+    direction TB
+    P1["Addon #1"]
+    P2["Addon #2"]
+    Pn["…"]
+  end
+
+  %% External flows
+  A -- events --> C1
+  M <-- scans & loads --> P1
+  M <-- scans & loads --> P2
+  M -. scans & loads .-> Pn
+
+  %% Addons use Core API (single, clean edges)
+  P1 --> API
+  P2 --> API
+  Pn -.-> API
+
+  %% Styling (GitHub Mermaid supports classDef/style)
+  classDef core fill:#f5f7ff,stroke:#6b7cff,stroke-width:1px,color:#0b1021;
+  classDef addons fill:#fff7f0,stroke:#ff9a3c,stroke-width:1px,color:#1a0f00;
+  classDef discord fill:#e7f7ff,stroke:#3bb2e6,stroke-width:1px,color:#001018;
+  classDef comp fill:#ffffff,stroke:#c0c7d1,stroke-width:1px,color:#111827;
+  classDef hub fill:#ffffff,stroke:#6b7cff,stroke-width:2px,color:#0b1021;
+
+  class Core core;
+  class Addons addons;
+  class Discord discord;
+  class C1,C2,C3,C4,M,P1,P2,Pn comp;
+  class API hub;
 ```
-
-
 
 - **Core**: Holds only minimal logic, manages addons and provides APIs.
 - **Addon API**: Defines stable interfaces for addon development.
