@@ -12,9 +12,8 @@ into the `addons/` folder.
 
 - **Addon System**: Drop-in JAR addons with lifecycle hooks (`onLoad`, `onEnable`, `onDisable`).
 - **Command System**: Annotation-based (`@DiscordCommand`) Slash Commands.
-- **Placeholder System**: Namespaced placeholders (`{namespace.key}`), similar to PlaceholderAPI.
+- **Placeholder System**: Namespaced placeholders (`{namespace.key}`), similar to [Minecraft's PlaceholderAPI](https://wiki.placeholderapi.com/).
 - **Configuration**: YAML-based, automatic defaults, and reloadable.
-- **Multiple Databases**: SQLite (default), MySQL, MariaDB via Spring Profiles.
 - **Spring Boot Integration**: Powerful configuration and lifecycle management.
 - **Hot Reload**: Reload all addons at runtime with `/core reload`.
 
@@ -32,7 +31,7 @@ flowchart TB
 
   subgraph Core
     direction LR
-    M["AddonManager\n+ ClassLoader"]
+    M["AddonManager + ClassLoader"]
     API(("Core API"))
     C1["Bot Lifecycle"]
     C2["CommandRegistrar"]
@@ -58,12 +57,12 @@ flowchart TB
   M <-- scans & loads --> P2
   M -. scans & loads .-> Pn
 
-  %% Addons use Core API (single, clean edges)
+  %% Addons use Core API
   P1 --> API
   P2 --> API
   Pn -.-> API
 
-  %% Styling (GitHub Mermaid supports classDef/style)
+  %% Styling
   classDef core fill:#f5f7ff,stroke:#6b7cff,stroke-width:1px,color:#0b1021;
   classDef addons fill:#fff7f0,stroke:#ff9a3c,stroke-width:1px,color:#1a0f00;
   classDef discord fill:#e7f7ff,stroke:#3bb2e6,stroke-width:1px,color:#001018;
@@ -97,8 +96,8 @@ nextbot/
 │ ├── build.gradle.kts
 │ └── src/main/java/gg/nextforge/nextbot/api/... (API interfaces)
 └── exampleaddon/ (optional)
-├── src/main/java/gg/nextforge/nextbot/exampleaddon/HelloAddon.java
-└── src/main/resources/addon.yml
+  ├── src/main/java/gg/nextforge/nextbot/exampleaddon/HelloAddon.java
+  └── src/main/resources/addon.yml
 
 ```
 
@@ -116,12 +115,7 @@ Configuration lives in `core/src/main/resources/application.yml`.
 
 - Bot token is loaded from environment: `${DISCORD_TOKEN}`
 - Addons directory: `./addons`
-- Database: SQLite by default. Switch to MySQL/MariaDB with Spring profiles.
-
-Example: Run with MySQL
-```bash
-SPRING_PROFILES_ACTIVE=mysql DISCORD_TOKEN=yourtoken ./gradlew :core:bootRun
-```
+- Database: SQLite
 
 ---
 
@@ -142,7 +136,7 @@ DISCORD_TOKEN=yourtoken ./gradlew :core:bootRun
 
 1. Create a new Gradle project with dependency on `addon-api`.
 2. Implement a class that implements `Addon`.
-3. Add an `addon.yml` descriptor in your resources:
+3. Add an `addon.yml` descriptor in your resources (similar to `plugin.yml` in Bukkit/Spigot):
    ```yaml
    name: MyAddon
    version: 1.0.0
