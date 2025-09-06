@@ -24,19 +24,19 @@ into the `addons/` folder.
 
 ```mermaid
 flowchart LR
-    subgraph Discord[Discord]
+    subgraph Discord
       A[Discord API]
     end
 
-    subgraph Core[Core (Spring Boot)]
+    subgraph Core
       C1[Bot Lifecycle]
       C2[CommandRegistrar]
       C3[PlaceholderRegistry]
       C4[ConfigFacade]
-      C5[AddonManager + Child-First CL]
+      C5[AddonManager + ClassLoader]
     end
 
-    subgraph Addons[Addons (JARs in ./addons)]
+    subgraph Addons
       P1[Addon #1]
       P2[Addon #2]
       Pn[...]
